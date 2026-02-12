@@ -13,45 +13,18 @@ export async function registerRoutes(
   // === Puzzle Logic ===
   
   function generatePuzzle() {
-    const rules = [
-      { name: "Linear (+n)", fn: (x: number, n: number) => x + n },
-      { name: "Linear (-n)", fn: (x: number, n: number) => x - n },
-      { name: "Geometric (*n)", fn: (x: number, n: number) => x * n },
-      { name: "Squares", fn: (x: number, n: number) => (x + 1) ** 2 },
-      { name: "Fibonacci-style", fn: (x: number, n: number, prev?: number) => (prev ?? 0) + x },
-    ];
-
-    const type = Math.floor(Math.random() * rules.length);
-    const start = Math.floor(Math.random() * 10) + 1;
+    // Generate a puzzle in the format an + b
+    const a = Math.floor(Math.random() * 9) + 2; // coefficient (2 to 10)
+    const b = Math.floor(Math.random() * 20) + 1; // constant (1 to 20)
     const length = 5;
-    const sequence: number[] = [start];
-    
-    let ruleDescription = "";
-    
-    if (type === 0) {
-      const step = Math.floor(Math.random() * 9) + 1;
-      ruleDescription = `Add ${step} to previous number`;
-      for (let i = 1; i < length; i++) sequence.push(sequence[i-1] + step);
-    } else if (type === 1) {
-      const step = Math.floor(Math.random() * 5) + 1;
-      ruleDescription = `Subtract ${step} from previous number`;
-      for (let i = 1; i < length; i++) sequence.push(sequence[i-1] - step);
-    } else if (type === 2) {
-      const factor = Math.floor(Math.random() * 2) + 2; // *2 or *3
-      ruleDescription = `Multiply previous number by ${factor}`;
-      for (let i = 1; i < length; i++) sequence.push(sequence[i-1] * factor);
-    } else if (type === 3) {
-      ruleDescription = `Perfect squares (n^2)`;
-      // Override sequence for squares
-      const base = Math.floor(Math.random() * 5) + 1;
-      for (let i = 0; i < length; i++) sequence[i] = (base + i) ** 2;
-    } else if (type === 4) {
-      ruleDescription = `Add the two previous numbers`;
-      sequence[1] = Math.floor(Math.random() * 5) + 1;
-      for (let i = 2; i < length; i++) sequence.push(sequence[i-1] + sequence[i-2]);
+    const sequence: number[] = [];
+
+    for (let n = 1; n <= length; n++) {
+      sequence.push(a * n + b);
     }
 
-    const missingIndex = Math.floor(Math.random() * (length - 1)) + 1; // Don't hide the first one usually
+    const ruleDescription = `The rule is ${a}n + ${b}`;
+    const missingIndex = Math.floor(Math.random() * (length - 1)) + 1;
     const solution = sequence[missingIndex];
     
     return { sequence, missingIndex, solution, rule: ruleDescription };
