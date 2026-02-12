@@ -1,38 +1,51 @@
-import { type User, type InsertUser } from "@shared/schema";
-import { randomUUID } from "crypto";
+import { db } from "./db";
+import { scores, type InsertScore, type Score } from "@shared/schema";
+import { desc } from "drizzle-orm";
 
-// modify the interface with any CRUD methods
-// you might need
+export interface Puzzle {
+  id: string;
+  sequence: (number | null)[];
+  missingIndex: number;
+  solution: number;
+  rule: string;
+}
 
 export interface IStorage {
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  // Scoreboard
+  getScores(): Promise<Score[]>;
+  createScore(score: InsertScore): Promise<Score>;
+  
+  // Ephemeral Puzzle Storage
+  createPuzzle(puzzle: Puzzle): Promise<void>;
+  getPuzzle(id: string): Promise<Puzzle | undefined>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<string, User>;
+export class DatabaseStorage implements IStorage {
+  // In-memory cache for active puzzles (no need to persist these)
+  private activePuzzles: Map<string, Puzzle> = new Map();
 
-  constructor() {
-    this.users = new Map();
+  async getScores(): Promise<Score[]> {
+    return await db.select().from(scores).orderBy(desc(scores.score)).limit(10);
   }
 
-  async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
+  async createScore(insertScore: InsertScore): Promise<Score> {
+    const [score] = await db.insert(scores).values(insertScore).returning();
+    return score;
   }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
+  async createPuzzle(puzzle: Puzzle): Promise<void> {
+    this.activePuzzles.set(puzzle.id, puzzle);
+    
+    // Cleanup old puzzles periodically or limit size if needed
+    if (this.activePuzzles.size > 1000) {
+      const firstKey = this.activePuzzles.keys().next().value;
+      if (firstKey) this.activePuzzles.delete(firstKey);
+    }
   }
 
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
+  async getPuzzle(id: string): Promise<Puzzle | undefined> {
+    return this.activePuzzles.get(id);
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();

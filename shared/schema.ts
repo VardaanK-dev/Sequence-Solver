@@ -1,18 +1,33 @@
-import { sql } from "drizzle-orm";
-import { pgTable, text, varchar } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-export const users = pgTable("users", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  username: text("username").notNull().unique(),
-  password: text("password").notNull(),
+export const scores = pgTable("scores", {
+  id: serial("id").primaryKey(),
+  username: text("username").notNull(),
+  score: integer("score").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
-export const insertUserSchema = createInsertSchema(users).pick({
-  username: true,
-  password: true,
-});
+export const insertScoreSchema = createInsertSchema(scores).omit({ id: true, createdAt: true });
 
-export type InsertUser = z.infer<typeof insertUserSchema>;
-export type User = typeof users.$inferSelect;
+export type Score = typeof scores.$inferSelect;
+export type InsertScore = z.infer<typeof insertScoreSchema>;
+
+// === API Types ===
+
+export interface PuzzleResponse {
+  id: string;
+  sequence: (number | null)[];
+}
+
+export interface CheckSolutionRequest {
+  id: string;
+  guess: number;
+}
+
+export interface CheckSolutionResponse {
+  correct: boolean;
+  correctAnswer: number;
+  ruleExplanation: string;
+}
