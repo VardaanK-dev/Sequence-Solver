@@ -10,12 +10,10 @@ export default function Home() {
   const [streak, setStreak] = useState(0);
   const [isGameOver, setIsGameOver] = useState(false);
 
-  // If correct, increment streak but wait for user to click next to fetch new puzzle
   const handleCorrect = () => {
-    setStreak(prev => prev + 1);
+    // Correct answer feedback is handled in PuzzleCard
   };
 
-  // If incorrect, game over!
   const handleIncorrect = () => {
     setIsGameOver(true);
   };
@@ -25,7 +23,6 @@ export default function Home() {
   };
 
   const handleRestart = () => {
-    setStreak(0);
     setIsGameOver(false);
     refetch();
   };
@@ -60,22 +57,13 @@ export default function Home() {
               SeqFinder
             </h1>
           </div>
-          
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 px-4 py-2 bg-slate-100 rounded-full border border-slate-200">
-              <Zap className={`w-5 h-5 ${streak > 0 ? 'text-yellow-500 fill-yellow-500' : 'text-slate-400'}`} />
-              <span className="font-mono font-bold text-slate-700">{streak}</span>
-              <span className="text-xs font-bold uppercase text-slate-400 tracking-wider">Streak</span>
-            </div>
-          </div>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <div className="space-y-8">
           {/* Main Game Area */}
-          <div className="lg:col-span-8 space-y-8">
+          <div className="space-y-8">
             {isLoading ? (
               <div className="bg-white rounded-[2rem] p-12 shadow-xl border-4 border-slate-100 flex flex-col items-center justify-center min-h-[400px]">
                 <RefreshCw className="w-12 h-12 text-primary animate-spin mb-4" />
@@ -97,19 +85,11 @@ export default function Home() {
               <p>Find the pattern in the sequence and enter the missing number.</p>
             </div>
           </div>
-
-          {/* Sidebar */}
-          <div className="lg:col-span-4 h-full">
-             <div className="sticky top-28">
-               <ScoreBoard />
-             </div>
-          </div>
         </div>
       </main>
 
       <GameOverModal 
         isOpen={isGameOver} 
-        score={streak} 
         onRestart={handleRestart}
       />
     </div>
