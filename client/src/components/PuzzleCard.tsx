@@ -146,25 +146,25 @@ export function PuzzleCard({ id, sequence, onNext, onCorrect, onIncorrect }: Puz
               animate={{ opacity: 1, scale: 1 }}
               className={`
                 rounded-2xl p-6 text-center
-                ${result.correct ? 'bg-green-50 border-2 border-green-100' : 'bg-red-50 border-2 border-red-100'}
+                ${result.correct ? 'bg-green-500/10 border-2 border-green-500/20' : 'bg-red-500/10 border-2 border-red-500/20'}
               `}
             >
               <div className="mb-4">
                 <div className={`
                   w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4
-                  ${result.correct ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}
+                  ${result.correct ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}
                 `}>
                   {result.correct ? <Check className="w-8 h-8" /> : <X className="w-8 h-8" />}
                 </div>
-                <h3 className={`text-2xl font-bold mb-2 ${result.correct ? 'text-green-800' : 'text-red-800'}`}>
+                <h3 className={`text-2xl font-bold mb-2 ${result.correct ? 'text-green-400' : 'text-red-400'}`}>
                   {result.correct ? 'Brilliant!' : 'Not quite right'}
                 </h3>
-                <p className={`${result.correct ? 'text-green-700' : 'text-red-700'} mb-2 text-lg`}>
+                <p className={`${result.correct ? 'text-green-300' : 'text-red-300'} mb-2 text-lg`}>
                   The answer was <span className="font-bold">{result.answer}</span>
                 </p>
-                <div className="bg-white/60 rounded-lg p-3 inline-block">
-                  <p className="text-sm font-medium text-slate-600">
-                    <span className="font-bold text-slate-800 uppercase text-xs tracking-wider mr-2">Rule:</span>
+                <div className="bg-white/5 rounded-lg p-3 inline-block">
+                  <p className="text-sm font-medium text-muted-foreground">
+                    <span className="font-bold text-foreground uppercase text-xs tracking-wider mr-2">Rule:</span>
                     {result.rule}
                   </p>
                 </div>
@@ -174,10 +174,9 @@ export function PuzzleCard({ id, sequence, onNext, onCorrect, onIncorrect }: Puz
                 onClick={handleNext}
                 autoFocus
                 className="
-                  mx-auto px-8 py-3 bg-white border-2 rounded-xl font-bold text-lg
-                  shadow-sm hover:shadow-md hover:-translate-y-0.5
+                  mx-auto px-8 py-3 bg-primary text-primary-foreground border-2 border-primary rounded-xl font-bold text-lg
+                  shadow-lg shadow-primary/20 hover:shadow-xl hover:-translate-y-0.5
                   transition-all duration-200 flex items-center gap-2
-                  text-slate-700 border-slate-200
                 "
               >
                 Next Puzzle <ArrowRight className="w-5 h-5" />
