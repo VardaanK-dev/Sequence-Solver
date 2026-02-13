@@ -5,7 +5,7 @@ import { ScoreBoard } from "@/components/ScoreBoard";
 import { GameOverModal } from "@/components/GameOverModal";
 import { Zap, BrainCircuit, RefreshCw } from "lucide-react";
 
-import logoImg from "@assets/logo_for_math_game_1770992095700.png";
+import logoImg from "@assets/Gemini_Generated_Image_vqfmsqvqfmsqvqfm-removebg-preview_1770997451977.png";
 
 export default function Home() {
   const { data: puzzle, isLoading, error, refetch } = usePuzzle();
@@ -31,10 +31,10 @@ export default function Home() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="min-h-screen flex items-center justify-center bg-background text-foreground">
         <div className="text-center p-8">
           <BrainCircuit className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-          <h2 className="text-xl font-bold text-foreground mb-2">Something went wrong</h2>
+          <h2 className="text-xl font-bold mb-2">Something went wrong</h2>
           <button 
             onClick={() => window.location.reload()}
             className="text-primary font-bold hover:underline"
@@ -55,7 +55,7 @@ export default function Home() {
             <img 
               src={logoImg} 
               alt="Sequence Logic Logo" 
-              className="w-12 h-12 rounded-xl shadow-lg object-contain bg-black"
+              className="w-12 h-12 rounded-xl object-contain"
             />
             <h1 className="text-2xl font-display font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               Sequence Logic
@@ -69,9 +69,9 @@ export default function Home() {
           {/* Main Game Area */}
           <div className="space-y-8">
             {isLoading ? (
-              <div className="bg-white rounded-[2rem] p-12 shadow-xl border-4 border-slate-100 flex flex-col items-center justify-center min-h-[400px]">
+              <div className="bg-card rounded-[2rem] p-12 shadow-xl border-4 border-border flex flex-col items-center justify-center min-h-[400px]">
                 <RefreshCw className="w-12 h-12 text-primary animate-spin mb-4" />
-                <p className="text-lg font-medium text-slate-500">Loading your puzzle...</p>
+                <p className="text-lg font-medium text-muted-foreground">Loading your puzzle...</p>
               </div>
             ) : puzzle ? (
               <PuzzleCard 
@@ -85,8 +85,8 @@ export default function Home() {
             ) : null}
 
             {/* Instructions / Footer Info */}
-            <div className="bg-white/50 border border-slate-200 rounded-2xl p-6 text-center text-slate-500">
-              <p>Find the pattern in the sequence and enter the missing number.</p>
+            <div className="bg-primary/20 border-2 border-primary/30 rounded-2xl p-6 text-center shadow-lg shadow-primary/5">
+              <p className="text-primary-foreground font-bold text-lg">Find the pattern in the sequence and enter the missing number.</p>
             </div>
           </div>
         </div>
