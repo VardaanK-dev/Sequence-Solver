@@ -5,6 +5,8 @@ import { ScoreBoard } from "@/components/ScoreBoard";
 import { GameOverModal } from "@/components/GameOverModal";
 import { Zap, BrainCircuit, RefreshCw } from "lucide-react";
 
+import logoImg from "@assets/logo_for_math_game_1770992095700.png";
+
 export default function Home() {
   const { data: puzzle, isLoading, error, refetch } = usePuzzle();
   const [streak, setStreak] = useState(0);
@@ -29,10 +31,10 @@ export default function Home() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center p-8">
-          <BrainCircuit className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-          <h2 className="text-xl font-bold text-slate-700 mb-2">Something went wrong</h2>
+          <BrainCircuit className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+          <h2 className="text-xl font-bold text-foreground mb-2">Something went wrong</h2>
           <button 
             onClick={() => window.location.reload()}
             className="text-primary font-bold hover:underline"
@@ -45,16 +47,18 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 font-body text-slate-800 pb-12">
+    <div className="min-h-screen bg-background font-body text-foreground pb-12">
       {/* Header */}
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-50">
+      <header className="bg-card border-b border-border sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary/20">
-              <BrainCircuit className="w-6 h-6" />
-            </div>
+            <img 
+              src={logoImg} 
+              alt="Sequence Logic Logo" 
+              className="w-12 h-12 rounded-xl shadow-lg object-contain bg-black"
+            />
             <h1 className="text-2xl font-display font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              SeqFinder
+              Sequence Logic
             </h1>
           </div>
         </div>

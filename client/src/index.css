@@ -10,28 +10,31 @@
   --font-body: 'Nunito', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  /* HSL format */
-  --background: 210 40% 98%;
-  --foreground: 222 47% 11%;
+  /* Dark Mode HSL format */
+  --background: 222 47% 11%;
+  --foreground: 210 40% 98%;
   
   --primary: 262 83% 58%;
   --primary-foreground: 210 40% 98%;
   
-  --secondary: 32 95% 60%; /* Playful Orange */
+  --secondary: 32 95% 60%; 
   --secondary-foreground: 222 47% 11%;
   
-  --muted: 210 40% 96%;
-  --muted-foreground: 215 16% 47%;
+  --muted: 217 32% 17%;
+  --muted-foreground: 215 20% 65%;
   
-  --accent: 172 66% 50%; /* Teal/Cyan */
+  --accent: 172 66% 50%; 
   --accent-foreground: 222 47% 11%;
   
   --destructive: 0 84% 60%;
   --destructive-foreground: 210 40% 98%;
   
-  --border: 214 32% 91%;
-  --input: 214 32% 91%;
+  --border: 217 32% 17%;
+  --input: 217 32% 17%;
   --ring: 262 83% 58%;
+  
+  --card: 222 47% 11%;
+  --card-foreground: 210 40% 98%;
   
   --radius: 1rem;
 }

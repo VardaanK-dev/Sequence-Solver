@@ -62,17 +62,17 @@ export function PuzzleCard({ id, sequence, onNext, onCorrect, onIncorrect }: Puz
   const isPending = checkSolution.isPending;
 
   return (
-    <div className="bg-white rounded-[2rem] p-8 shadow-xl border-4 border-slate-100 relative overflow-hidden">
+    <div className="bg-card rounded-[2rem] p-8 shadow-xl border-4 border-border relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute top-0 right-0 p-32 bg-primary/5 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none" />
       
       <div className="relative z-10">
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-800 flex items-center gap-2">
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground flex items-center gap-2">
             <span className="w-3 h-8 bg-secondary rounded-full inline-block"></span>
             Solve the Sequence
           </h2>
-          <div className="bg-slate-100 p-2 rounded-full text-slate-400">
+          <div className="bg-muted p-2 rounded-full text-muted-foreground">
             <HelpCircle className="w-6 h-6" />
           </div>
         </div>
@@ -89,7 +89,7 @@ export function PuzzleCard({ id, sequence, onNext, onCorrect, onIncorrect }: Puz
                 w-16 h-16 md:w-24 md:h-24 flex items-center justify-center rounded-2xl text-2xl md:text-4xl font-mono font-bold
                 ${num === null 
                   ? 'bg-secondary/10 border-2 border-dashed border-secondary text-secondary' 
-                  : 'bg-slate-50 border-2 border-slate-200 text-slate-700 shadow-sm'
+                  : 'bg-muted border-2 border-border text-foreground shadow-sm'
                 }
               `}
             >
@@ -117,9 +117,9 @@ export function PuzzleCard({ id, sequence, onNext, onCorrect, onIncorrect }: Puz
                   placeholder="?"
                   disabled={isPending}
                   className="
-                    flex-1 bg-slate-50 border-2 border-slate-200 rounded-xl px-6 py-4 text-center text-2xl font-bold text-slate-800
+                    flex-1 bg-muted border-2 border-border rounded-xl px-6 py-4 text-center text-2xl font-bold text-foreground
                     focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all
-                    placeholder:text-slate-300
+                    placeholder:text-muted-foreground/30
                   "
                 />
                 <button
