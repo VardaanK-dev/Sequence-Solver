@@ -6,11 +6,11 @@ export function usePuzzle() {
   return useQuery({
     queryKey: [api.puzzle.get.path],
     queryFn: async () => {
-      const res = await fetch(api.puzzle.get.path);
+      const res = await fetch(buildUrl(api.puzzle.get.path));
       if (!res.ok) throw new Error("Failed to fetch puzzle");
       return api.puzzle.get.responses[200].parse(await res.json());
     },
-    refetchOnWindowFocus: false, // Don't refetch when tabbing back
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -18,7 +18,7 @@ export function usePuzzle() {
 export function useCheckSolution() {
   return useMutation({
     mutationFn: async ({ id, guess }: { id: string; guess: number }) => {
-      const res = await fetch(api.puzzle.check.path, {
+      const res = await fetch(buildUrl(api.puzzle.check.path), {
         method: api.puzzle.check.method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, guess }),
@@ -34,7 +34,7 @@ export function useScores() {
   return useQuery({
     queryKey: [api.scores.list.path],
     queryFn: async () => {
-      const res = await fetch(api.scores.list.path);
+      const res = await fetch(buildUrl(api.scores.list.path));
       if (!res.ok) throw new Error("Failed to fetch scores");
       return api.scores.list.responses[200].parse(await res.json());
     },
@@ -46,7 +46,7 @@ export function useSubmitScore() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (data: InsertScore) => {
-      const res = await fetch(api.scores.create.path, {
+      const res = await fetch(buildUrl(api.scores.create.path), {
         method: api.scores.create.method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
