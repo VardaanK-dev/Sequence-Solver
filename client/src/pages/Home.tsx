@@ -6,6 +6,16 @@ import { GameOverModal } from "@/components/GameOverModal";
 import { Zap, BrainCircuit, RefreshCw } from "lucide-react";
 
 import logoImg from "@assets/Gemini_Generated_Image_vqfmsqvqfmsqvqfm-removebg-preview_1770997451977.png";
+import wahidaImg from "@assets/WhatsApp_Image_2025-12-05_at_1.28.37_PM_1771156327157.jpg";
+import { SiReplit } from "react-icons/si";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Info } from "lucide-react";
 
 export default function Home() {
   const { data: puzzle, isLoading, error, refetch } = usePuzzle();
@@ -61,6 +71,44 @@ export default function Home() {
               Sequence Logic
             </h1>
           </div>
+
+          <Dialog>
+            <DialogTrigger asChild>
+              <button className="flex items-center gap-2 px-4 py-2 bg-muted hover:bg-muted/80 rounded-xl transition-colors text-sm font-bold border border-border">
+                <Info className="w-4 h-4" /> Credits
+              </button>
+            </DialogTrigger>
+            <DialogContent className="bg-card border-border sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle className="text-center text-2xl font-display">Credits</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-8 py-4">
+                <div className="flex flex-col items-center text-center gap-3">
+                  <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-primary shadow-xl">
+                    <img 
+                      src={wahidaImg} 
+                      alt="Wahida" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold">Wahida</h3>
+                    <p className="text-muted-foreground text-sm">Web game idea inspired by</p>
+                  </div>
+                </div>
+
+                <div className="flex flex-col items-center text-center gap-3">
+                  <div className="w-24 h-24 rounded-full bg-slate-800 flex items-center justify-center border-4 border-border shadow-xl">
+                    <SiReplit className="w-12 h-12 text-[#F26207]" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold">Replit</h3>
+                    <p className="text-muted-foreground text-sm">Site creation</p>
+                  </div>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </header>
 
