@@ -93,7 +93,7 @@ export default function Home() {
                   </div>
                   <div>
                     <h3 className="text-xl font-bold">Wahida</h3>
-                    <p className="text-muted-foreground text-sm">Web game idea inspired by</p>
+                    <p className="text-muted-foreground text-sm">For inspiring the idea of making a Web game</p>
                   </div>
                 </div>
 
