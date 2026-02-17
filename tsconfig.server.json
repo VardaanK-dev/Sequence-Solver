@@ -1,0 +1,22 @@
+{
+  "include": ["server/**/*", "shared/schema.ts"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.test.ts",
+    "vite.config.ts",
+    "client",
+    "tailwind.config.ts",
+    "shared/routes.ts"
+  ],
+   "compilerOptions": {
+      "module": "NodeNext",
+      "target": "ES2020",
+      "moduleResolution": "NodeNext",
+     "outDir": "dist",
+      "rootDir": ".",
+      "esModuleInterop": true,
+      "strict": true,
+      "skipLibCheck": true
+   }
+}

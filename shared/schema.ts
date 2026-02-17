@@ -1,18 +1,31 @@
-import { pgTable, text, serial, integer, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, integer, text } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-export const scores = pgTable("scores", {
-  id: serial("id").primaryKey(),
-  username: text("username").notNull(),
-  score: integer("score").notNull(),
-  createdAt: timestamp("created_at").defaultNow(),
-});
+export const scores = pgTable(
+  "scores",
+  (c) => ({
+    id: c.integer("id")
+      .primaryKey()
+      .default(sql`nextval('app.scores_id_seq'::regclass)`),
+    username: c.text("username").notNull(),
+    score: c.integer("score").notNull(),
+    createdAt: c.timestamp("created_at").defaultNow(),
+  }),
+  (table) => ({
+    schema: "app",
+  })
+);
 
-export const insertScoreSchema = createInsertSchema(scores).omit({ id: true, createdAt: true });
+export const insertScoreSchema = createInsertSchema(scores).omit({
+  id: true,
+  createdAt: true,
+});
 
 export type Score = typeof scores.$inferSelect;
 export type InsertScore = z.infer<typeof insertScoreSchema>;
+
 
 // === API Types ===
 

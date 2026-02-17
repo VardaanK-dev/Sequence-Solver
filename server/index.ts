@@ -1,20 +1,10 @@
 import 'dotenv/config';
 import express, { type Request, Response, NextFunction } from "express";
 import cors from "cors";
-import { registerRoutes } from "./routes";
-import { serveStatic } from "./static";
+import { registerRoutes } from "./routes.js";
+import { serveStatic } from "./static.js";
 import { createServer } from "http";
-
-export const api = {
-  puzzle: {
-    get: { path: "/api/puzzle" },
-    check: { path: "/api/puzzle/check", method: "POST" },
-  },
-  scores: {
-    list: { path: "/api/scores" },
-    create: { path: "/api/scores", method: "POST" },
-  },
-};
+import { api } from "../shared/routes.js";
 
 const app = express();
 const httpServer = createServer(app);
@@ -103,7 +93,7 @@ app.get("/api/health", (_req, res) => {
   if (process.env.NODE_ENV === "production") {
     serveStatic(app);
   } else {
-    const { setupVite } = await import("./vite");
+    const { setupVite } = await import("./vite.js");
     await setupVite(httpServer, app);
   }
 

@@ -1,5 +1,5 @@
-import { db } from "./db";
-import { scores, type InsertScore, type Score } from "@shared/schema";
+import { db } from "./db.js";
+import { scores, type InsertScore, type Score } from "../shared/schema.js";
 import { desc } from "drizzle-orm";
 
 export interface Puzzle {
@@ -28,10 +28,18 @@ export class DatabaseStorage implements IStorage {
     return await db.select().from(scores).orderBy(desc(scores.score)).limit(10);
   }
 
-  async createScore(insertScore: InsertScore): Promise<Score> {
-    const [score] = await db.insert(scores).values(insertScore).returning();
-    return score;
-  }
+async createScore(insertScore: { username: string; score: number }): Promise<Score> {
+  const [score] = await db
+    .insert(scores)
+    .values({
+      username: insertScore.username,
+      score: insertScore.score,
+    })
+    .returning();
+
+  return score;
+}
+
 
   async createPuzzle(puzzle: Puzzle): Promise<void> {
     this.activePuzzles.set(puzzle.id, puzzle);

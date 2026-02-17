@@ -1,5 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { api, buildUrl, type InsertScore } from "@shared/routes";
+import { api, buildUrl } from "@shared/routes"; // fine if paths alias is set
+import type { InsertScore } from "@shared/schema";
+import type { Score } from "@shared/schema";
 
 // Hook for fetching a new puzzle
 export function usePuzzle() {
@@ -31,7 +33,7 @@ export function useCheckSolution() {
 
 // Hook for fetching high scores
 export function useScores() {
-  return useQuery({
+  return useQuery<Score[]>({
     queryKey: [api.scores.list.path],
     queryFn: async () => {
       const res = await fetch(buildUrl(api.scores.list.path));

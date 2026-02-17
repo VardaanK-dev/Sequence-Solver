@@ -1,0 +1,8 @@
+CREATE SCHEMA IF NOT EXISTS app;
+
+CREATE TABLE app.scores (
+  id SERIAL PRIMARY KEY,
+  username TEXT NOT NULL,
+  score INTEGER NOT NULL,
+  created_at TIMESTAMP DEFAULT now()
+);

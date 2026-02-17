@@ -1,9 +1,10 @@
 import type { Express } from "express";
 import type { Server } from "http";
-import { storage } from "./storage";
-import { api } from "@shared/routes";
+import { storage } from "./storage.js";
+import { api } from "../shared/api.js";
 import { z } from "zod";
 import { randomUUID } from "crypto";
+import { insertScoreSchema } from "../shared/schema.js";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -49,49 +50,53 @@ export async function registerRoutes(
     res.json({ id, sequence: puzzleSequence });
   });
 
-  app.post(api.puzzle.check.path, async (req, res) => {
-    try {
-      const { id, guess } = api.puzzle.check.input.parse(req.body);
-      const puzzle = await storage.getPuzzle(id);
-      
-      if (!puzzle) {
-        return res.status(404).json({ message: "Puzzle expired or not found" });
-      }
+// === Scores ===
 
-      const correct = puzzle.solution === guess;
-      
-      res.json({
-        correct,
-        correctAnswer: puzzle.solution,
-        ruleExplanation: puzzle.rule
-      });
-    } catch (err) {
-      if (err instanceof z.ZodError) {
-        res.status(400).json({ message: "Invalid input" });
-      }
+app.get(api.scores.list.path, async (req, res) => {
+  const scores = await storage.getScores();
+  res.json(scores);
+});
+
+app.post(api.scores.create.path, async (req, res) => {
+  try {
+    const input = insertScoreSchema.parse(req.body);
+    const score = await storage.createScore(input);
+    res.status(201).json(score);
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      res.status(400).json({ message: "Invalid input" });
+    } else {
       throw err;
     }
-  });
+  }
+});
 
-  // === Scores ===
+// === Puzzle Check ===
 
-  app.get(api.scores.list.path, async (req, res) => {
-    const scores = await storage.getScores();
-    res.json(scores);
-  });
+app.post(api.puzzle.check.path, async (req, res) => {
+  try {
+    const { id, guess } = api.puzzle.check.input.parse(req.body);
+    const puzzle = await storage.getPuzzle(id);
 
-  app.post(api.scores.create.path, async (req, res) => {
-    try {
-      const input = api.scores.create.input.parse(req.body);
-      const score = await storage.createScore(input);
-      res.status(201).json(score);
-    } catch (err) {
-      if (err instanceof z.ZodError) {
-        res.status(400).json({ message: "Invalid input" });
-      }
+    if (!puzzle) {
+      return res.status(404).json({ message: "Puzzle expired or not found" });
+    }
+
+    const correct = puzzle.solution === guess;
+
+    res.json({
+      correct,
+      correctAnswer: puzzle.solution,
+      ruleExplanation: puzzle.rule,
+    });
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      res.status(400).json({ message: "Invalid input" });
+    } else {
       throw err;
     }
-  });
+  }
+});
 
-  return httpServer;
+return httpServer;
 }
