@@ -13,6 +13,7 @@ interface PuzzleData {
   sequence: number[];
   missingIndex: number;
   step: number;
+  start: number;
 }
 const puzzles: Record<string, PuzzleData> = {};
 
@@ -34,7 +35,7 @@ app.get("/api/puzzle", (_req, res) => {
   const missingIndex = Math.floor(Math.random() * length);
   const puzzleSequence = sequence.map((n, i) => (i === missingIndex ? null : n));
 
-  puzzles[id] = { sequence, missingIndex, step };
+  puzzles[id] = { sequence, missingIndex, step, start };
 
   res.json({ id, sequence: puzzleSequence, missingIndex });
 });
@@ -51,10 +52,13 @@ app.post("/api/puzzle/check", (req: Request, res: Response) => {
   const correctAnswer = puzzle.sequence[puzzle.missingIndex];
   const correct = guess === correctAnswer;
 
+  // Build a simple nth-term formula like "an = 2n+1"
+  const formula = `aₙ = ${puzzle.step}n + ${puzzle.start - puzzle.step}`;
+
   res.json({
     correct,
     correctAnswer,
-    ruleExplanation: `This is an arithmetic sequence with step ${puzzle.step}. The nth term is aₙ = ${puzzle.sequence[0]} + (n-1)×${puzzle.step}.`,
+    ruleExplanation: formula,
   });
 });
 
