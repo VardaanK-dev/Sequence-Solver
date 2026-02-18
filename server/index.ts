@@ -9,16 +9,21 @@ app.use(cors());
 app.use(express.json());
 
 // In-memory puzzle store
-const puzzles: Record<string, number[]> = {};
+interface PuzzleData {
+  sequence: number[];
+  missingIndex: number;
+  step: number;
+}
+const puzzles: Record<string, PuzzleData> = {};
 
 // Health check
 app.get("/api/health", (_req: Request, res: Response) => {
   res.json({ status: "ok", timestamp: Date.now() });
 });
 
-// GET /api/puzzle → generate random arithmetic sequence
+// GET /api/puzzle → generate random arithmetic sequence with a missing number
 app.get("/api/puzzle", (_req, res) => {
-  const length = 5;
+  const length = 6;
   const start = Math.floor(Math.random() * 10) + 1;
   const step = Math.floor(Math.random() * 5) + 1;
 
@@ -27,42 +32,29 @@ app.get("/api/puzzle", (_req, res) => {
 
   // Pick a random index to hide
   const missingIndex = Math.floor(Math.random() * length);
-  const correctAnswer = sequence[missingIndex];
+  const puzzleSequence = sequence.map((n, i) => (i === missingIndex ? null : n));
 
-  // Replace with null so frontend can render "?"
-  const puzzleSequence = sequence.map((n, i) =>
-    i === missingIndex ? null : n
-  );
+  puzzles[id] = { sequence, missingIndex, step };
 
-  puzzles[id] = sequence; // store full sequence
   res.json({ id, sequence: puzzleSequence, missingIndex });
 });
 
-
 // POST /api/puzzle/check → validate guess
-app.post("/api/puzzle/check", (req, res) => {
+app.post("/api/puzzle/check", (req: Request, res: Response) => {
   const { id, guess } = req.body;
-  const sequence = puzzles[id];
+  const puzzle = puzzles[id];
 
-  if (!sequence) {
+  if (!puzzle) {
     return res.status(404).json({ message: "Puzzle not found" });
   }
 
-  // Find the missing index by looking for null in the puzzle sent earlier
-  // (or store missingIndex alongside the puzzle)
-  const step = sequence[1] - sequence[0];
-  const missingIndex = sequence.findIndex((n, i, arr) =>
-    i > 0 && n - arr[i - 1] !== step
-  );
-
-  // Simpler: store missingIndex when generating puzzle
-  const correctAnswer = sequence[missingIndex];
+  const correctAnswer = puzzle.sequence[puzzle.missingIndex];
   const correct = guess === correctAnswer;
 
   res.json({
     correct,
     correctAnswer,
-    ruleExplanation: `This is an arithmetic sequence with step ${step}`,
+    ruleExplanation: `This is an arithmetic sequence with step ${puzzle.step}. The nth term is aₙ = ${puzzle.sequence[0]} + (n-1)×${puzzle.step}.`,
   });
 });
 
